@@ -96,22 +96,6 @@ powershell -ExecutionPolicy Bypass -File tests\run_regression.ps1
 The test script checks process exit codes, mesh sections, file sizes, and
 expected physical groups for the standard examples.
 
-## Repository Layout
-
-```text
-OpenDFN/
-├─ CMakeLists.txt
-├─ README.md
-├─ LICENSE
-├─ NOTICE.md
-├─ src/                         OpenDFN source code and module headers
-├─ include/                     Public-header layout note
-├─ examples/                    Standard examples and paper-case inputs
-├─ tests/                       Regression scripts
-├─ docs/                        Project documentation
-└─ release_windows_x64/         Windows x64 executable and bundled libraries
-```
-
 ## License
 
 The OpenDFN source headers state `LGPL-2.1-or-later` together with an

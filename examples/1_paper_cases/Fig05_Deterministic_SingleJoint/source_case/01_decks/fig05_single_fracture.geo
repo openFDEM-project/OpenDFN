@@ -1,0 +1,17 @@
+cl__1 = 0.32;
+Point(5) = {-4, -2.2, 0, cl__1};
+Point(6) = {4, 2.2, 0, cl__1};
+Point(7) = {-5, -5, 0, cl__1};
+Point(8) = {5, -5, 0, cl__1};
+Point(9) = {-5, 5, 0, cl__1};
+Point(10) = {5, 5, 0, cl__1};
+Line(5) = {5, 6};
+Line(6) = {7, 8};
+Line(7) = {9, 7};
+Line(8) = {8, 10};
+Line(9) = {10, 9};
+Curve Loop(1) = {6, 8, 9, 7};
+Plane Surface(1) = {1};
+Line {5} In Surface {1};
+Physical Curve("fracture_01") = {5};
+Physical Surface("rock") = {1};

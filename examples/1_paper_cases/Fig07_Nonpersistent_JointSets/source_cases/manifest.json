@@ -1,0 +1,68 @@
+{
+  "title": "Fig. 7 source data",
+  "notes": [
+    "Non-persistent single-set and double-set input decks and generated results."
+  ],
+  "files": [
+    {
+      "path": "nonpersistent_double_set/01_decks/fig09b_nonpersistent_double_set.dfn",
+      "bytes": 563,
+      "sha256": "4b98a7c27ef90200bd1c7ce1c0e23d5ccfc2dc0fc827f960cbfdcdddfcc5e1c3"
+    },
+    {
+      "path": "nonpersistent_double_set/02_results/fig09b_nonpersistent_double_set.geo",
+      "bytes": 37789,
+      "sha256": "66c1afcff82d91cf54ed7d2b8a112d23ca30a903b454d5af903415983e3515a2"
+    },
+    {
+      "path": "nonpersistent_double_set/02_results/fig09b_nonpersistent_double_set.msh",
+      "bytes": 300944,
+      "sha256": "b5d0236af4c20b5bbf94f89af8f948b3fc5ffda7cee3dd225ba594e70cb4bc29"
+    },
+    {
+      "path": "nonpersistent_double_set/02_results/fig09b_nonpersistent_double_set.vtk",
+      "bytes": 255774,
+      "sha256": "a880035ec3aca99fd2e3175756df0a195c232baeeba2d93b9abd087bb00aa800"
+    },
+    {
+      "path": "nonpersistent_double_set/03_data/fig09b_nonpersistent_double_set.console.log",
+      "bytes": 16400,
+      "sha256": "e63d464e5fc5747102695d8a4c86a67538ae39b9cc2c54e29d95105c9366660a"
+    },
+    {
+      "path": "nonpersistent_double_set/README.txt",
+      "bytes": 364,
+      "sha256": "35569e3bc68ae966251a8e781e48f8193bee5e811a80d0192bfe722a93b54757"
+    },
+    {
+      "path": "nonpersistent_single_set/01_decks/fig09a_nonpersistent_single_set.dfn",
+      "bytes": 404,
+      "sha256": "65a996a5649dce1ddcb3fdb3df2c7a19f4047bd7861dce053c548541c6dbe9d7"
+    },
+    {
+      "path": "nonpersistent_single_set/02_results/fig09a_nonpersistent_single_set.geo",
+      "bytes": 17746,
+      "sha256": "5f1772d87c9299c1068b4f80649a0e04bcf246ec30374b00b894f2d155137cf9"
+    },
+    {
+      "path": "nonpersistent_single_set/02_results/fig09a_nonpersistent_single_set.msh",
+      "bytes": 222465,
+      "sha256": "1ff5e5f785e1644904862883006a0b0efcea4b573a830fa6ed5b8c19f4e48223"
+    },
+    {
+      "path": "nonpersistent_single_set/02_results/fig09a_nonpersistent_single_set.vtk",
+      "bytes": 189804,
+      "sha256": "bc2f823a274e86215715d2a2f7207879da1ef7e08f484192475ae70159f03e9d"
+    },
+    {
+      "path": "nonpersistent_single_set/03_data/fig09a_nonpersistent_single_set.console.log",
+      "bytes": 6972,
+      "sha256": "351730cc43e1d1c766f9f99b0338370b5cbd8606ac8927cb641375ddead20c89"
+    },
+    {
+      "path": "nonpersistent_single_set/README.txt",
+      "bytes": 364,
+      "sha256": "88b5e997a98516cb839a739b73de75c7b9ed8f606d089b7cf3f5efbb3004bdc3"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "stochastic": {
+    "mesh": "D:\\GPTworkspace\\project004_DFNgenerator\\OpenDFN_0907_word_matched_revision\\revision_20260910_round2\\fig09_very_dense_candidates\\fig09_very_dense_400_h0.12_s0.08\\fig09_very_dense_400_h0.12_s0.08.runtime.msh",
+    "mesh_sha256": "ffa0744b8cc9bd0201fb42df4baf2abce2b6b2e37d3a7c93bfb90f48029a2d18",
+    "nodes": 15736,
+    "triangles": 31079,
+    "line_elements": 6130,
+    "mean_angle": 46.59801605236477,
+    "minimum_angle": 0.20268751072841504,
+    "mean_q": 0.922466201736562,
+    "minimum_q": 0.006127186597380512,
+    "under20_count": 207,
+    "under20_percent": 0.6660445960294733,
+    "nonconforming_line_elements": 0
+  },
+  "region7b": {
+    "mesh": "D:\\GPTworkspace\\project004_DFNgenerator\\OpenDFN_0907_word_matched_revision\\revision_20260910_work\\fracpaq_verified\\region7b_h0p3_s0p04_a12\\runtime.msh",
+    "mesh_sha256": "00d4135916d805ed95ccb35004853e2865ee01b4e0d61abc99ec235dff04acd4",
+    "nodes": 18306,
+    "triangles": 36239,
+    "line_elements": 4588,
+    "mean_angle": 46.349002801749684,
+    "minimum_angle": 0.002383379898126929,
+    "mean_q": 0.9181868345090229,
+    "minimum_q": 6.817977333645713e-05,
+    "under20_count": 408,
+    "under20_percent": 1.1258588813157095,
+    "nonconforming_line_elements": 0
+  },
+  "region7c": {
+    "mesh": "D:\\GPTworkspace\\project004_DFNgenerator\\OpenDFN_0907_word_matched_revision\\revision_20260910_work\\fracpaq_verified\\region7c_h0p3_s0p04_a12\\runtime.msh",
+    "mesh_sha256": "e0cb6ca9e4f7fa665bc3f136558f306db64aa3bbfa7e127f9c3f02a323689b69",
+    "nodes": 14900,
+    "triangles": 29436,
+    "line_elements": 4132,
+    "mean_angle": 46.737723181448025,
+    "minimum_angle": 0.0008088769758013145,
+    "mean_q": 0.9234531920971466,
+    "minimum_q": 2.443255904846392e-05,
+    "under20_count": 250,
+    "under20_percent": 0.8493001766544368,
+    "nonconforming_line_elements": 0
+  },
+  "discontinuous_deck": "D:\\GPTworkspace\\project004_DFNgenerator\\OpenDFN_0907_word_matched_revision\\revision_20260910_round2\\cases\\fig08_red_trace1p6\\fig08_red_trace1p6.dfn",
+  "stochastic_deck": "D:\\GPTworkspace\\project004_DFNgenerator\\OpenDFN_0907_word_matched_revision\\revision_20260910_round2\\fig09_very_dense_candidates\\fig09_very_dense_400_h0.12_s0.08\\fig09_very_dense_400_h0.12_s0.08.dfn",
+  "discontinuous": {
+    "mesh": "D:\\GPTworkspace\\project004_DFNgenerator\\OpenDFN_0907_word_matched_revision\\revision_20260910_round2\\cases\\fig08_red_trace1p6\\fig08_red_trace1p6.runtime.msh",
+    "mesh_sha256": "3e1a950cc93e18b5fcece2f6ac91c5b1930a0ef4d00eeccae40eff2d21f923ac",
+    "nodes": 2292,
+    "triangles": 4427,
+    "line_elements": 383,
+    "mean_angle": 48.07720825272332,
+    "minimum_angle": 1.784729068919425,
+    "mean_q": 0.9407662014022863,
+    "minimum_q": 0.050034638708101216,
+    "under20_count": 10,
+    "under20_percent": 0.225886604924328,
+    "nonconforming_line_elements": 0
+  }
+}

@@ -1,0 +1,2 @@
+Generation domain: [-7,7] x [-7,7]. Physical host square: [-5,5] x [-5,5].
+The expanded generation domain allows the first and last traces to be clipped at the host boundary, improving upper-right and lower-right coverage.

@@ -1,0 +1,8 @@
+odfn.geometry.domain [-7 7 -7 7]
+odfn.geometry.minsize 0.05
+odfn.geometry.minangle 15
+odfn.geometry.iteration 80
+odfn.geometry.square 'rock' [-5 5 -5 5]
+odfn.geometry.cut.jset 'persistent_set_01' 'rock' dip 35 space 1.05 start -6.80 6.80
+odfn.geometry.mesh.size 'default' 0.30
+odfn.geometry.mesh delaunay

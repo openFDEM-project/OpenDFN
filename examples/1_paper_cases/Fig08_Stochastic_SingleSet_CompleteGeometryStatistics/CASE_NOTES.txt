@@ -1,0 +1,3 @@
+The original Fig.8 input deck and geometry/mesh outputs are retained unchanged.
+Dip-angle and trace-length statistics are calculated after rejoining collinear child segments belonging to each complete accepted fracture, rather than counting mesh subsegments independently.
+The rose colour limits are integer vmin=20 and vmax=80; the rose itself is the only colour-mapped rose in the current Fig.8 package.

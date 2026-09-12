@@ -1,0 +1,9 @@
+# Fig. 5: one deterministic fracture in a square domain.
+# Start point S=(-4.0,-2.2); end point E=(4.0,2.2).
+odfn.geometry.domain [-5.2 5.2 -5.2 5.2]
+odfn.geometry.minsize 0.08
+odfn.geometry.minangle 20
+odfn.geometry.square 'rock' [-5 5 -5 5]
+odfn.geometry.cut.joint 'fracture_01' 'rock' [-4.0 -2.2 4.0 2.2]
+odfn.geometry.mesh.size 'default' 0.32
+odfn.geometry.mesh delaunay

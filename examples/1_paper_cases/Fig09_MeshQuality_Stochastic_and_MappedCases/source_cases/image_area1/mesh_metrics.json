@@ -1,0 +1,24 @@
+{
+  "msh": "D:\\GPTworkspace\\project004_DFNgenerator\\OpenDFN_0907_word_matched_revision\\revision_20260910_work\\fracpaq_verified\\region7b_h0p3_s0p04_a12\\runtime.msh",
+  "mesh_size": 0.3,
+  "min_size": 0.04,
+  "min_angle": 12.0,
+  "nodes": 18306,
+  "triangles": 36239,
+  "line_elements": 4588,
+  "nonconforming_line_elements": 0,
+  "mean_min_angle": 46.349002801749684,
+  "min_angle_result": 0.002383379898126929,
+  "mean_q": 0.9181868345090229,
+  "min_q": 6.817977333645713e-05,
+  "angle_below_20_count": 408,
+  "angle_below_20_percent": 1.1258588813157095,
+  "edge_length_quantiles": [
+    0.0002126395057054823,
+    0.07149846335914675,
+    0.11427442137147951,
+    0.2093879719387809,
+    0.3000611636410571,
+    0.4183147879338359
+  ]
+}

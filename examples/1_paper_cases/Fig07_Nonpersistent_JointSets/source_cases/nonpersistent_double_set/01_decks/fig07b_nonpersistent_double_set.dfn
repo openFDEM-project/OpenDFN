@@ -1,0 +1,12 @@
+# Fig. 7(c,d): two intersecting non-persistent sets with distinct statistics.
+odfn.geometry.domain [-5.2 5.2 -5.2 5.2]
+odfn.geometry.minsize 0.04
+odfn.geometry.minangle 12
+odfn.geometry.iteration 100
+odfn.geometry.square 'rock' [-5 5 -5 5]
+odfn.geometry.cut.jset 'nonpersistent_set_01' 'rock' dip 35 n_space 0.78 0.05 n_trace 1.20 0.12 n_gap 0.42 0.05 start -4.75 4.75
+odfn.geometry.cut.jset 'nonpersistent_set_02' 'rock' dip 125 n_space 1.10 0.08 n_trace 0.92 0.10 n_gap 0.62 0.07 start -4.75 -4.75
+odfn.geometry.mesh.size 'default' 0.28
+odfn.geometry.mesh delaunay
+
+

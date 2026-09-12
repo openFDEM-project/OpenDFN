@@ -1,0 +1,19 @@
+{
+  "layout": "six separate bar histograms",
+  "palette_option": "A",
+  "colors": {
+    "stochastic_dfn": "#0072B2",
+    "image_area_1": "#E69F00",
+    "image_area_2": "#009E73"
+  },
+  "common_angle_ylim": 0.06747010463378175,
+  "common_quality_ylim": 12.112973909498574,
+  "outputs": [
+    "D:\\GPTworkspace\\project004_DFNgenerator\\Fig10_six_bar_OptionA_20260911\\svg\\fig10_a_stochastic_dfn_minimum_angle.svg",
+    "D:\\GPTworkspace\\project004_DFNgenerator\\Fig10_six_bar_OptionA_20260911\\svg\\fig10_b_stochastic_dfn_mesh_quality.svg",
+    "D:\\GPTworkspace\\project004_DFNgenerator\\Fig10_six_bar_OptionA_20260911\\svg\\fig10_c_image_area_1_minimum_angle.svg",
+    "D:\\GPTworkspace\\project004_DFNgenerator\\Fig10_six_bar_OptionA_20260911\\svg\\fig10_d_image_area_1_mesh_quality.svg",
+    "D:\\GPTworkspace\\project004_DFNgenerator\\Fig10_six_bar_OptionA_20260911\\svg\\fig10_e_image_area_2_minimum_angle.svg",
+    "D:\\GPTworkspace\\project004_DFNgenerator\\Fig10_six_bar_OptionA_20260911\\svg\\fig10_f_image_area_2_mesh_quality.svg"
+  ]
+}

@@ -1,7 +1,0 @@
-# OpenDFN stochastic fracture-network example
-odfn.geometry.domain [-6 6 -6 6]
-odfn.geometry.square 'rock' [-5 5 -5 5]
-odfn.geometry.cut.dfn 'set_1' 'rock' count 80 n_dip 55 6 n_length 1.4 0.35
-odfn.geometry.cut.dfn 'set_2' 'rock' count 80 n_dip 125 6 n_length 1.2 0.30
-odfn.geometry.mesh.size 'default' 0.30
-odfn.geometry.mesh auto

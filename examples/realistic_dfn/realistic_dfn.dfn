@@ -1,0 +1,6 @@
+# OpenDFN coordinate-driven realistic fracture-network example
+odfn.geometry.domain [-0.1 3.0 -0.1 3.6]
+odfn.geometry.square 'rock' [0 2.85 0 3.47]
+odfn.geometry.import.rdfn 1000.0 'mapped_fractures' 'rock' 'fractures.txt'
+odfn.geometry.mesh.size 'default' 0.08
+odfn.geometry.mesh.write 'realistic_dfn.msh'

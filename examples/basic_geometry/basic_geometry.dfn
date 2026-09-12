@@ -1,0 +1,7 @@
+# OpenDFN basic geometry example
+odfn.geometry.domain [-6 6 -5 5]
+odfn.geometry.square 'rock' [-5 5 -4 4]
+odfn.geometry.cut.joint 'main_joint' 'rock' [-5 -2 5 2]
+odfn.geometry.cut.joint 'cross_joint' 'rock' [-2 -4 2 4]
+odfn.geometry.mesh.size 'default' 0.35
+odfn.geometry.mesh auto

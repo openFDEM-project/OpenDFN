@@ -1,0 +1,8 @@
+# Single deterministic joint through a rectangular rock sample.
+odfn.geometry.domain [-6 6 -5 5]
+odfn.geometry.minsize 0.10
+odfn.geometry.minangle 20
+odfn.geometry.square 'rock' [-5 5 -4 4]
+odfn.geometry.cut.joint 'single_joint' 'rock' [-5 -2 5 2]
+odfn.geometry.mesh.size 'default' 0.35
+odfn.geometry.mesh auto

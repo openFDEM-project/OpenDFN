@@ -1,0 +1,9 @@
+# Arbitrarily oriented stochastic DFN. Dip angles are sampled uniformly over
+# 0-180 degrees and fracture lengths follow a normal distribution.
+odfn.geometry.domain [-6 6 -6 6]
+odfn.geometry.minsize 0.08
+odfn.geometry.minangle 15
+odfn.geometry.square 'rock' [-5 5 -5 5]
+odfn.geometry.cut.dfn 'arbitrary_network' 'rock' count 120 u_dip 0 180 n_length 1.45 0.40
+odfn.geometry.mesh.size 'default' 0.30
+odfn.geometry.mesh auto

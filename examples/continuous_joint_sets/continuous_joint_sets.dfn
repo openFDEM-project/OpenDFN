@@ -1,0 +1,10 @@
+# Two persistent joint sets. No trace/gap parameters are supplied, so every
+# generated joint remains continuous across the host surface.
+odfn.geometry.domain [-6 6 -6 6]
+odfn.geometry.minsize 0.10
+odfn.geometry.minangle 20
+odfn.geometry.square 'rock' [-5 5 -5 5]
+odfn.geometry.cut.jset 'continuous_set_01' 'rock' dip 45 space 1.50 start -4.5 -4.5
+odfn.geometry.cut.jset 'continuous_set_02' 'rock' dip 135 space 1.70 start 4.5 -4.5
+odfn.geometry.mesh.size 'default' 0.30
+odfn.geometry.mesh auto

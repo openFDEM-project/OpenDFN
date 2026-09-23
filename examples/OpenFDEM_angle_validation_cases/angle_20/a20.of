@@ -1,0 +1,36 @@
+# OpenFDEM stochastic DFN sensitivity case: minimum intersection angle = 20 degrees
+# The DFN is read from the random_set_01 physical line group stored in a20.msh.
+of.new
+of.set.result "a20_result"
+of.set.omp 8
+
+of.import "a20.msh"
+of.mesh.insert 'rock'
+
+of.mat.element 'rock' neo den 2700 E 50e9 v 0.15 damp 0.05
+of.mat.cohesive 'default' EM ten 4e6 coh 15e6 fric 0.47 GI 10 GII 100
+of.group.cohelement.from.dfn 'dfn' 'random_set_01'
+of.mat.cohesive 'dfn' EM ten 4e6 coh 15e6 fric 0.47 GI 10 GII 100
+of.mat.contact 'default' MC fric 0.47
+
+of.group.edge 'left' range plane.on [-5 -5 -5 5]
+of.group.edge 'right' range plane.on [5 -5 5 5]
+of.group.edge 'up' range plane.on [-5 5 5 5]
+of.group.edge 'down' range plane.on [-5 -5 5 -5]
+
+of.boundary.edge.viscous 'left' no sh
+of.boundary.edge.viscous 'right' no sh
+of.boundary.edge.viscous 'up' no sh
+of.boundary.edge.viscous 'down' no sh
+
+of.boundary.edge.pressure 'left' normal 30e6
+of.boundary.edge.pressure 'right' normal 30e6
+of.boundary.edge.pressure 'up' normal 10e6
+of.boundary.edge.pressure 'down' normal 10e6
+
+of.history.pv.field default
+of.history.pv.fracture default
+of.history.pv.interval 10000
+
+of.solve.step 247525
+of.finalize

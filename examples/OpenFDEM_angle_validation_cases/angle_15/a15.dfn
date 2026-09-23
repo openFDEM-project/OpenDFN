@@ -1,0 +1,10 @@
+odfn.geometry.domain [-5 5 -5 5]
+odfn.geometry.minsize 0.08
+odfn.geometry.minangle 15
+odfn.geometry.iteration 100
+odfn.geometry.square 'rock' [-5 5 -5 5]
+odfn.geometry.cut.dfn 'random_set_01' 'rock' count 400 u_dip 45 0 n_length 0.90 0.9
+#odfn.geometry.cut.dfn 'random_set_02' 'rock' count 400 u_dip 105 145 n_length 0.78 0.16
+odfn.geometry.mesh.size 'default' 0.06
+odfn.geometry.mesh delaunay
+

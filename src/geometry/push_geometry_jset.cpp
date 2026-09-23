@@ -9,7 +9,7 @@
  * \email     xfli@whrsm.ac.cn
  * \date      Created:       June 24, 2020
  * \date      Last modified: 2026-07-20 00:04:35
- * \version   OpenDFN Version 4.40 (managed by CMake macro PRG_VERSION,
+ * \version   OpenDFN Version 1.0.0 (managed by CMake macro PRG_VERSION,
  *            generated into common/opendfn_config.h from opendfn_config.h.in)
  *
  * \see OpenDFN Project Website: https://xiaofengli-uoft.github.io/Mainpage/
@@ -19,8 +19,6 @@
  *
  * Copyright (C) 2017-2026 Xiaofeng Li. OpenDFN Contributors.
  *
- * OpenDFN is free for educational, research and non-profit purposes.
- * Any commerical or military use should be authorised by the developer.
  *
  * OpenDFN is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -48,8 +46,8 @@ namespace ns_geometry {
  *
  * Reads the new joint tag and target object tag from the input, then parses the
  * joint-set statistical parameters via parseJsets (dip, spacing, trace length,
- * gap, persistence, optional user-defined start point). A GSL random number
- * generator is initialised to sample those distributions.
+ * gap, persistence, optional user-defined start point). A C++ standard-library
+ * random-number generator is initialised to sample those distributions.
  *
  * Starting from a seed point (user-defined or offset from a domain corner based
  * on dip), the routine marches across the rectangular domain in steps of the
@@ -63,7 +61,7 @@ namespace ns_geometry {
  *
  * Side effects:
  *  - Reads and advances the input file stream (general->inputfile).
- *  - Consumes randomness from a GSL RNG that is allocated and freed internally.
+ *  - Consumes randomness from a local standard-library RNG.
  *  - Mutates geometry state: grows geometry->node and geometry->line, updates
  *    node_num/line_num, adds lines to surface boolean groups, and finally
  *    registers node groups (addtoLinetoNodeGroups) and line groups
@@ -90,11 +88,7 @@ void GeometryBuilder::push_geometry_jset(General general, Geometry geometry) {
     parseStringinQuotation(general->inputfile, newToolTag);
     parseStringinQuotation(general->inputfile, ObjectTag);
 
-    const gsl_rng_type* T;
-    gsl_rng*            r;
-    gsl_rng_env_setup();
-    T = gsl_rng_default;
-    r = gsl_rng_alloc(T);
+    ns_common::OpenDFNRandom r;
 
     // get the parameters of jset command
     parseJsets(general, Jsetdata);
@@ -290,7 +284,6 @@ void GeometryBuilder::push_geometry_jset(General general, Geometry geometry) {
             // to jump out
         } while (isinStrictBox(movingPoint, Region));
 
-        gsl_rng_free(r);
     }
     // add to node groups
     addtoLinetoNodeGroups(geometry, newToolTag);

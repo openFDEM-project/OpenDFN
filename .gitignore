@@ -39,6 +39,12 @@
 *.out
 *.app
 
+# Validated Windows release artifacts
+!bin/opendfn.exe
+!bin/gmsh-5.0.dll
+!release_windows_x64/windows-x64/lib/gmsh.dll.lib
+!release_windows_x64/windows-x64/lib/gmsh-5.0.dll
+
 # Build directories
 build/
 Build/

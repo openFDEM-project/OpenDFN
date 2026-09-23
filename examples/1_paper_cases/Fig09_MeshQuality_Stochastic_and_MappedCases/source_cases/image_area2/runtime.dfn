@@ -1,9 +1,0 @@
-# Exact official FracPaQ Fig.9c trace data.
-odfn.geometry.domain [0 22.70833333 0 26.6]
-odfn.geometry.minsize 0.04
-odfn.geometry.minangle 12
-odfn.geometry.iteration 100
-odfn.geometry.square 'rock' [0 22.70833333 0 26.6]
-odfn.geometry.import.rdfn 120 'mapped_fractures' 'rock' 'leftsideJoints_space.txt'
-odfn.geometry.mesh.size 'default' 0.3
-odfn.geometry.mesh delaunay

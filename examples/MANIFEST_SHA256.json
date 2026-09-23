@@ -1,0 +1,87 @@
+[
+  {
+    "path": "01_deterministic_joint/fig05_single_fracture.dfn",
+    "bytes": 375,
+    "sha256": "d3bb91771ce02959534b651341d49864e8577d81170fb8ed32344d0906f57817"
+  },
+  {
+    "path": "02_intersecting_continuous_joint_sets/fig06_double_extended_domain.dfn",
+    "bytes": 401,
+    "sha256": "dd9096387040f20871759a24c4a90742e2039f6c2f3fbb9ddbc0e4e216100ef4"
+  },
+  {
+    "path": "03_single_discontinuous_joint_set/fig07a_nonpersistent_single_set.dfn",
+    "bytes": 421,
+    "sha256": "93f4773da14253723209b168e6fd7cec2eccb044a5fbee15191fe5befe2f95d5"
+  },
+  {
+    "path": "04_intersecting_discontinuous_joint_sets/fig07b_nonpersistent_double_set.dfn",
+    "bytes": 570,
+    "sha256": "d5e84a5a1c623be5014262586b9bca0c6315f8fa7b90fd8efe00ea6624db20d7"
+  },
+  {
+    "path": "05_stochastic_dfn/Fig08a_high_density_stochastic_DFN.dfn",
+    "bytes": 307,
+    "sha256": "6509e11e56c428a6e1eb7326d7f1562a10fed27545eca4b7bfbc505ac9038cce"
+  },
+  {
+    "path": "06_image_derived_dfn_area_1/leftsideFaults_space.txt",
+    "bytes": 22375,
+    "sha256": "6ae6f709f53ea9001f5a08cc3b0782dd2b6b06559aba079407feddfc39efe62b"
+  },
+  {
+    "path": "06_image_derived_dfn_area_1/runtime.dfn",
+    "bytes": 378,
+    "sha256": "ec455179d602ee2a92744029d26996d82ce5a6f54456d39a561637078c889b9b"
+  },
+  {
+    "path": "07_image_derived_dfn_area_2/leftsideJoints_space.txt",
+    "bytes": 13441,
+    "sha256": "3f73ad3afe8da20e2c148c55aae8bcd31a4e3662be1e0245d130f1a1ba9c50d3"
+  },
+  {
+    "path": "07_image_derived_dfn_area_2/runtime.dfn",
+    "bytes": 378,
+    "sha256": "05fa43d5e9acdb9d82e2e2937e48710aa5aae9c3c023202ef6c2538be47da74c"
+  },
+  {
+    "path": "08_Stochastic_DFN_Unfiltered_geometry/case.dfn",
+    "bytes": 301,
+    "sha256": "ca0ad92219ee9bb8fa548958da1644b336f72146bb2f76f7302d00235a7540eb"
+  },
+  {
+    "path": "09_Area_1_DFN_Unfiltered_geometry/case.dfn",
+    "bytes": 310,
+    "sha256": "8da52f2c365c8941c726fed32bc31772deb4b6342e1d9368a580c94f18a78b0b"
+  },
+  {
+    "path": "09_Area_1_DFN_Unfiltered_geometry/fractures.txt",
+    "bytes": 22375,
+    "sha256": "6ae6f709f53ea9001f5a08cc3b0782dd2b6b06559aba079407feddfc39efe62b"
+  },
+  {
+    "path": "10_Area_2_DFN_Unfiltered_geometry/case.dfn",
+    "bytes": 310,
+    "sha256": "e8affe21880180eccc3341ca711c77eb65c2125052de90716e2c2dc868f1b8aa"
+  },
+  {
+    "path": "10_Area_2_DFN_Unfiltered_geometry/fractures.txt",
+    "bytes": 13441,
+    "sha256": "3f73ad3afe8da20e2c148c55aae8bcd31a4e3662be1e0245d130f1a1ba9c50d3"
+  },
+  {
+    "path": "11_stochastic_dfn_10degrees/a10.dfn",
+    "bytes": 396,
+    "sha256": "8ca668b18662bb02532dcb28e51c9acdf961d6f927b1183d455bdc49915da267"
+  },
+  {
+    "path": "12_stochastic_dfn_15degrees/a15.dfn",
+    "bytes": 396,
+    "sha256": "6f4a9943145809e73d69ae5abdb681aee25612d8ac074c1eca2a015f8d16e246"
+  },
+  {
+    "path": "13_stochastic_dfn_20degrees/a20.dfn",
+    "bytes": 396,
+    "sha256": "b2d7f6df07fec0b239b190a92c47d3539507f39cfd4c7696cd4d223fd5dc92c3"
+  }
+]

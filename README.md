@@ -1,4 +1,4 @@
-# OpenDFN
+# OpenDFN 1.0.0
 
 OpenDFN is an open-source pre-processor for building two-dimensional discrete
 fracture network (DFN) geometries and generating conforming meshes. It reads a
@@ -16,90 +16,80 @@ Legacy VTK `.vtk` files.
 
 ## Quick Start on Windows
 
-The repository includes a prebuilt Windows x64 release in:
-
-```text
-release_windows_x64/windows-x64/bin/opendfn.exe
-```
-
-The DLLs required by the executable are stored beside it. From the repository
-root, run an example with:
+The Windows x64 executable and its required Gmsh DLL are stored in `bin/`.
+From the repository root, run:
 
 ```powershell
-release_windows_x64\windows-x64\bin\opendfn.exe `
-  -in examples\basic_geometry\basic_geometry.dfn
+$work = Join-Path $env:TEMP "opendfn-example"
+New-Item -ItemType Directory -Force -Path $work | Out-Null
+Copy-Item examples\01_deterministic_joint\fig05_single_fracture.dfn $work
+bin\opendfn.exe -in (Join-Path $work "fig05_single_fracture.dfn")
 ```
 
-The command writes `basic_geometry.msh`, `basic_geometry.geo`, and
-`basic_geometry.vtk` beside the input deck. To enable the optional Gmsh GUI:
+The command writes generated mesh and geometry files beside the temporary copy
+of the input deck. To enable the optional Gmsh GUI:
 
 ```powershell
 $env:OPENDFN_GMSH_GUI = "1"
 ```
 
-## Examples
+## Manuscript Examples
 
-The `examples/` directory contains small, self-contained input decks:
+The `examples/` directory contains 13 manuscript and validation cases. Each
+numbered directory contains one `.dfn` input deck and, when required, its
+coordinate file. The cases cover deterministic, continuous, discontinuous,
+stochastic, mapped, unfiltered, and minimum-angle comparison configurations.
 
-| Directory | Description |
-|---|---|
-| `single_joint` | One deterministic joint |
-| `multiple_joints` | Several explicit joints with different positions and directions |
-| `continuous_joint_sets` | Two persistent joint sets |
-| `discontinuous_joint_sets` | Two joint sets with finite traces and gaps |
-| `arbitrary_dfn` | DFN with uniformly sampled dips |
-| `input_real_dfn` | Coordinate text imported as an image-derived DFN |
-| `basic_geometry` | A rectangular domain with explicit joints |
-| `random_dfn` | Two statistically controlled random joint sets |
-| `realistic_dfn` | Coordinate-driven mapped fractures |
-
-Each case includes a `generate_formats.ps1` helper. To run all standard cases
-with the prebuilt executable, use:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File examples\generate_all_formats.ps1
-```
-
-The reproducibility inputs used for the manuscript figures are collected under
-`examples/paper_cases/`. Generated meshes, logs, and figures are intentionally
-not part of the source tree.
-
-## Build from Source
-
-OpenDFN currently targets C++20 and the Windows/MSVC toolchain. The bundled
-`release_windows_x64/windows-x64` directory contains the prebuilt Gmsh,
-Triangle, and GSL libraries used by the current Windows build. To configure and
-build with Visual Studio 2019:
-
-```powershell
-cmake -S . -B build -G "Visual Studio 16 2019" -A x64
-cmake --build build --config Release --parallel
-```
-
-To use a locally built dependency bundle, pass its root directory:
-
-```powershell
-cmake -S . -B build `
-  -DOPENDFN_THIRD_PARTY_ROOT=C:/path/to/windows-x64
-```
-
-The generated executable is written to `src/bin/Release/opendfn.exe`.
-
-## Regression Tests
-
-After building, run:
+Run all 13 cases in temporary working directories and validate their MSH, GEO,
+VTK, and physical-group outputs:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File tests\run_regression.ps1
 ```
 
-The test script checks process exit codes, mesh sections, file sizes, and
-expected physical groups for the standard examples.
+The case directories contain inputs only. Generated files are removed after
+validation. Input sizes and SHA-256 checksums for the 13 decks and four
+coordinate files are recorded in `examples/MANIFEST_SHA256.json`.
+
+## Build from Source
+
+OpenDFN 1.0.0 supports Windows 10/11 with the MSVC C++20 toolchain. Linux and
+GCC are not part of the validated release. Configure the build with the
+`lib` directory from the official Gmsh Windows64 SDK:
+
+```powershell
+cmake -S . -B build -G "Visual Studio 16 2019" -A x64 `
+  -DOPENDFN_GMSH_SDK_LIB_DIR=C:/path/to/gmsh-git-Windows64-sdk/lib
+cmake --build build --config Release --parallel
+```
+
+The generated executable is written to `bin/opendfn.exe`. Available runtime
+DLLs are copied to the same directory.
+
+## Validation
+
+Validate the input manifest and rerun every manuscript deck:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tests\check_paper_cases.ps1
+powershell -ExecutionPolicy Bypass -File tests\run_regression.ps1
+```
+
+The tests use temporary copies so the published inputs remain unchanged.
+Stochastic regression cases use `OPENDFN_RANDOM_SEED=0`.
+
+## Documentation
+
+- [Installation](docs/installation.md)
+- [Input format](docs/input-format.md)
+- [Examples](docs/examples.md)
+- [Reproducibility](docs/reproducibility.md)
+- [Mesh quality](docs/mesh-quality.md)
 
 ## License
 
-The OpenDFN source headers state `LGPL-2.1-or-later` together with an
-additional project notice concerning commercial or military use. See
-`LICENSE` and `NOTICE.md`, and confirm the final redistribution policy with the
-project maintainer before publishing a public release. Third-party components
-retain their upstream licenses.
+OpenDFN first-party source code is distributed under the GNU Lesser General
+Public License, version 2.1 or any later version
+(`LGPL-2.1-or-later`). No additional commercial, military, or
+maintainer-approval restriction applies. Third-party components retain their
+upstream licenses.

@@ -10,8 +10,7 @@
  * \email     xfli@whrsm.ac.cn
  * \date      Created:       June 24, 2020
  * \date      Last modified: 2026-07-20 01:06:08
- * \version   OpenDFN Version 4.40 (managed by CMake macro PRG_VERSION,
- *            generated into common/opendfn_config.h from opendfn_config.h.in)
+ * \version   OpenDFN Version 1.0.0
  *
  * \see OpenDFN Project Website: https://xiaofengli-uoft.github.io/Mainpage/
  * \see Geomechanics Group Website: https://geogroup.utoronto.ca/
@@ -20,8 +19,6 @@
  *
  * Copyright (C) 2017-2026 Xiaofeng Li. OpenDFN Contributors.
  *
- * OpenDFN is free for educational, research and non-profit purposes.
- * Any commerical or military use should be authorised by the developer.
  *
  * OpenDFN is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -38,7 +35,7 @@
  ******************************************************************************/
 
 /** \brief Human-readable program version string printed at startup. */
-#define PRG_VERSION "OpenDFN Version 4.40"
+#define PRG_VERSION "OpenDFN Version 1.0.0"
 /** \brief Project website URL string. */
 #define OPENDFN_WEBSITE "OpenDFN website https://xiaofengli-uoft.github.io/Mainpage/"
 /** \brief Maintainer contact email string. */
@@ -46,9 +43,9 @@
 /** \brief Copyright notice string. */
 #define OPENDFN_COPYRIGHT "Copyright (C) 2017-2026 Xiaofeng Li"                              
 /** \brief Build host architecture/OS identifier. */
-#define HOST_TYPE "AMD64-Windows"
+#define HOST_TYPE "Windows-MSVC"
 /** \brief Build host machine name. */
-#define HOST_NAME "DREAMER-PC"
+#define HOST_NAME "Windows build host"
 
 /** \brief Multi-line ASCII-art banner printed to the console at program startup. */
 #define PRG_HEADER "\

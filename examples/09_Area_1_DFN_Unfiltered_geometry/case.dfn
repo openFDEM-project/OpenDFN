@@ -1,0 +1,8 @@
+odfn.geometry.domain [0 23.70833333 0 28.9]
+odfn.geometry.minsize 0
+odfn.geometry.minangle 0
+odfn.geometry.iteration 100
+odfn.geometry.square 'rock' [0 23.70833333 0 28.9]
+odfn.geometry.import.rdfn 120 'mapped_fractures' 'rock' 'fractures.txt'
+odfn.geometry.mesh.size 'default' 0.3
+odfn.geometry.mesh delaunay

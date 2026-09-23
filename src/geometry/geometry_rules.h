@@ -9,7 +9,7 @@
  * \email     xfli@whrsm.ac.cn
  * \date      Created:       June 24, 2020
  * \date      Last modified: 2026-07-20 00:52:39
- * \version   OpenDFN Version 4.40 (managed by CMake macro PRG_VERSION,
+ * \version   OpenDFN Version 1.0.0 (managed by CMake macro PRG_VERSION,
  *            generated into common/opendfn_config.h from opendfn_config.h.in)
  *
  * \see OpenDFN Project Website: https://xiaofengli-uoft.github.io/Mainpage/
@@ -19,8 +19,6 @@
  *
  * Copyright (C) 2017-2026 Xiaofeng Li. OpenDFN Contributors.
  *
- * OpenDFN is free for educational, research and non-profit purposes.
- * Any commerical or military use should be authorised by the developer.
  *
  * OpenDFN is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,8 +37,7 @@
 #ifndef SOLID_SOLID_MECHANICS_GEOMETRY_UTILS_CLASS_
 #define SOLID_SOLID_MECHANICS_GEOMETRY_UTILS_CLASS_
 #include <algorithm>
-#include <external/gsl/gsl_randist.h>
-#include <external/gsl/gsl_rng.h>
+#include "common/opendfn_random.h"
 #include <mesh/mesh_utils.h>
 #include "core/opendfn_context.h"
 using namespace ns_mesh;
@@ -276,10 +273,10 @@ public:
      * OPENDFN_EXIT if no dip method is set.
      *
      * \param Jsetdata  Joint-set parameters supplying the dip descriptor/method.
-     * \param r         GSL random number generator state (advanced on sampling).
+     * \param r         OpenDFN random-number generator state (advanced on sampling).
      * \param dipAngle  Output sampled dip angle in degrees.
      */
-    static void getRandomDipAngle(Jset_data& Jsetdata, gsl_rng* r, Real& dipAngle) {
+    static void getRandomDipAngle(Jset_data& Jsetdata, ns_common::OpenDFNRandom& r, Real& dipAngle) {
         Real u;
         if (Jsetdata.dip_method == random_method::RANDOM_NULL) {
             OpenDFNMessage::RuntimeInfo("Error: no dips for joints.");
@@ -287,11 +284,11 @@ public:
         } else if (Jsetdata.dip_method == random_method::RANDOM_CONSTANT) {
             dipAngle = Jsetdata.dip[0];
         } else if (Jsetdata.dip_method == random_method::RANDOM_UNIFORM) {
-            u        = gsl_rng_uniform(r);
+            u        = r.uniform();
             dipAngle = Jsetdata.dip[0] + (Jsetdata.dip[1] - Jsetdata.dip[0]) * u;
         } else if (Jsetdata.dip_method == random_method::RANDOM_GAUSSE) {
             do {
-                u = gsl_ran_gaussian(r, Jsetdata.dip[1]);
+                u = r.gaussian(Jsetdata.dip[1]);
             } while ((Jsetdata.dip[0] + u) > 180 || (Jsetdata.dip[0] + u) < 0);
             dipAngle = Jsetdata.dip[0] + u;
         }
@@ -307,10 +304,10 @@ public:
      *
      * \param Jsetdata       Joint-set parameters supplying the space
      *                       descriptor/method.
-     * \param r              GSL random number generator state (advanced).
+     * \param r              OpenDFN random-number generator state (advanced).
      * \param spaceDistance  Output sampled spacing distance.
      */
-    static void getRandomSpace(Jset_data& Jsetdata, gsl_rng* r, Real& spaceDistance) {
+    static void getRandomSpace(Jset_data& Jsetdata, ns_common::OpenDFNRandom& r, Real& spaceDistance) {
         Real u;
         if (Jsetdata.space_method == random_method::RANDOM_NULL) {
             OpenDFNMessage::RuntimeInfo("Error: no space for joints.");
@@ -319,7 +316,7 @@ public:
             spaceDistance = Jsetdata.space[0];
         } else if (Jsetdata.space_method == random_method::RANDOM_GAUSSE) {
             do {
-                u = gsl_ran_gaussian(r, Jsetdata.space[1]);
+                u = r.gaussian(Jsetdata.space[1]);
             } while ((Jsetdata.space[0] + u) < 0.05 * Jsetdata.space[0]);
 
             spaceDistance = Jsetdata.space[0] + u;
@@ -336,10 +333,10 @@ public:
      *
      * \param Jsetdata     Joint-set parameters supplying the trace
      *                     descriptor/method.
-     * \param r            GSL random number generator state (advanced).
+     * \param r            OpenDFN random-number generator state (advanced).
      * \param traceLength  Output sampled trace length.
      */
-    static void getRandomTrace(Jset_data& Jsetdata, gsl_rng* r, Real& traceLength) {
+    static void getRandomTrace(Jset_data& Jsetdata, ns_common::OpenDFNRandom& r, Real& traceLength) {
         Real u;
         if (Jsetdata.trace_method == random_method::RANDOM_NULL) {
             OpenDFNMessage::RuntimeInfo("Error: no space for joints.");
@@ -348,7 +345,7 @@ public:
             traceLength = Jsetdata.trace[0];
         } else if (Jsetdata.trace_method == random_method::RANDOM_GAUSSE) {
             do {
-                u = gsl_ran_gaussian(r, Jsetdata.trace[1]);
+                u = r.gaussian(Jsetdata.trace[1]);
             } while ((Jsetdata.trace[0] + u) < 0.05 * Jsetdata.trace[0]);
 
             traceLength = Jsetdata.trace[0] + u;
@@ -365,10 +362,10 @@ public:
      *
      * \param Jsetdata     Joint-set parameters supplying the gap
      *                     descriptor/method.
-     * \param r            GSL random number generator state (advanced).
+     * \param r            OpenDFN random-number generator state (advanced).
      * \param gapDistance  Output sampled gap distance.
      */
-    static void getRandomGap(Jset_data& Jsetdata, gsl_rng* r, Real& gapDistance) {
+    static void getRandomGap(Jset_data& Jsetdata, ns_common::OpenDFNRandom& r, Real& gapDistance) {
         Real u;
         if (Jsetdata.gap_method == random_method::RANDOM_NULL) {
             OpenDFNMessage::RuntimeInfo("Error: no space for joints.");
@@ -377,7 +374,7 @@ public:
             gapDistance = Jsetdata.gap[0];
         } else if (Jsetdata.gap_method == random_method::RANDOM_GAUSSE) {
             do {
-                u = gsl_ran_gaussian(r, Jsetdata.gap[1]);
+                u = r.gaussian(Jsetdata.gap[1]);
             } while ((Jsetdata.gap[0] + u) < 0.05 * Jsetdata.gap[0]);
 
             gapDistance = Jsetdata.gap[0] + u;

@@ -9,7 +9,7 @@
  * \email     xfli@whrsm.ac.cn
  * \date      Created:       June 24, 2020
  * \date      Last modified: 2026-07-20 00:04:15
- * \version   OpenDFN Version 4.40 (managed by CMake macro PRG_VERSION,
+ * \version   OpenDFN Version 1.0.0 (managed by CMake macro PRG_VERSION,
  *            generated into common/opendfn_config.h from opendfn_config.h.in)
  *
  * \see OpenDFN Project Website: https://xiaofengli-uoft.github.io/Mainpage/
@@ -19,8 +19,6 @@
  *
  * Copyright (C) 2017-2026 Xiaofeng Li. OpenDFN Contributors.
  *
- * OpenDFN is free for educational, research and non-profit purposes.
- * Any commerical or military use should be authorised by the developer.
  *
  * OpenDFN is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,8 +35,6 @@
  ******************************************************************************/
 
 #include "common/opendfn_math.h"
-#include "external/gsl/gsl_randist.h"
-#include "external/gsl/gsl_rng.h"
 #include "geometry/opendfn_geometry_module.h"
 
 #define _METHOD_DFN_COUNT 0
@@ -54,7 +50,7 @@ namespace ns_geometry {
  * (dip and length distributions, target count, P21 or P10 intensity, and the
  * generation method) from @p general->inputfile. Random joint centres are sampled
  * uniformly inside the geometry bounding box, while joint dip and length are drawn
- * from the configured distributions (constant, uniform, Gaussian, or Fisher via GSL).
+ * from the configured distributions (constant, uniform, Gaussian, or Fisher via the C++ standard library).
  * Each candidate joint is validated for intersection quality before its two end
  * nodes and connecting line are appended to @p geometry. Generation continues until
  * the stopping criterion of the selected method is met:
@@ -66,7 +62,7 @@ namespace ns_geometry {
  * registers the added lines with the surface boolean-cut groups, node groups, and
  * line groups; advances the input-file parse cursor; may terminate the process via
  * OPENDFN_EXIT on an undefined domain or missing dip/length specification.
- * Allocates and frees a GSL random-number generator internally.
+ * Creates a local standard-library random-number generator internally.
  *
  * @param general  Global context providing the input-file stream to parse.
  * @param geometry Geometry container that is mutated with the generated joints.
@@ -86,11 +82,7 @@ void GeometryBuilder::push_geometry_DFN(General general, Geometry geometry) {
     Real length[2];
 
     Real                l_dip, l_length;
-    const gsl_rng_type* T;
-    gsl_rng*            r;
-    gsl_rng_env_setup();
-    T = gsl_rng_default;
-    r = gsl_rng_alloc(T);
+    ns_common::OpenDFNRandom r;
 
     /* get the name of the jset */
     char newToolTag[MAXARGC], ObjectTag[MAXARGC];
@@ -113,10 +105,10 @@ void GeometryBuilder::push_geometry_DFN(General general, Geometry geometry) {
                     /* get the random x y*/
                     /* x xoord */
                     // uniform random value between 0-1
-                    u = gsl_rng_uniform(r);
+                    u = r.uniform();
                     x = geometry->x0 + (geometry->x1 - geometry->x0) * u;
                     /* y coord */
-                    u = gsl_rng_uniform(r);
+                    u = r.uniform();
                     y = geometry->y0 + (geometry->y1 - geometry->y0) * u;
 
                     /* get the dip */
@@ -126,12 +118,12 @@ void GeometryBuilder::push_geometry_DFN(General general, Geometry geometry) {
                     } else if (dip_method == random_method::RANDOM_CONSTANT) {
                         l_dip = dip[0];
                     } else if (dip_method == random_method::RANDOM_UNIFORM) {
-                        u     = gsl_rng_uniform(r);
+                        u     = r.uniform();
                         l_dip = dip[0] + (dip[1] - dip[0]) * u;
                     } else if (dip_method == random_method::RANDOM_GAUSSE) {
                         do {
                             // with the deviation of dip[1]
-                            u = gsl_ran_gaussian(r, dip[1]);
+                            u = r.gaussian(dip[1]);
                         } while ((dip[0] + u) > 180 || (dip[0] + u) < 0);
                         l_dip = dip[0] + u;
                     }
@@ -144,14 +136,14 @@ void GeometryBuilder::push_geometry_DFN(General general, Geometry geometry) {
                         l_length = length[0];
                     } else if (length_method == random_method::RANDOM_GAUSSE) {
                         do {
-                            u = gsl_ran_gaussian(r, length[1]);
+                            u = r.gaussian(length[1]);
                             // not to small length
                         } while ((length[0] + u) < 0.05 * length[0]);
 
                         l_length = length[0] + u;
                     } else if (length_method == random_method::RANDOM_FISHER) {
                         do {
-                            u = gsl_ran_fdist(r, length[0], length[1]);
+                            u = r.fisherF(length[0], length[1]);
                             // not too small length
                         } while ((u) < 0.05 * length[0]);
                         l_length = u;
@@ -199,10 +191,10 @@ void GeometryBuilder::push_geometry_DFN(General general, Geometry geometry) {
                 do {
                     /* get the random x y*/
                     /* x xoord */
-                    u = gsl_rng_uniform(r);
+                    u = r.uniform();
                     x = geometry->x0 + (geometry->x1 - geometry->x0) * u;
                     /* y coord */
-                    u = gsl_rng_uniform(r);
+                    u = r.uniform();
                     y = geometry->y0 + (geometry->y1 - geometry->y0) * u;
 
                     /* get the dip */
@@ -212,11 +204,11 @@ void GeometryBuilder::push_geometry_DFN(General general, Geometry geometry) {
                     } else if (dip_method == random_method::RANDOM_CONSTANT) {
                         l_dip = dip[0];
                     } else if (dip_method == random_method::RANDOM_UNIFORM) {
-                        u     = gsl_rng_uniform(r);
+                        u     = r.uniform();
                         l_dip = dip[0] + (dip[1] - dip[0]) * u;
                     } else if (dip_method == random_method::RANDOM_GAUSSE) {
                         do {
-                            u = gsl_ran_gaussian(r, dip[1]);
+                            u = r.gaussian(dip[1]);
                         } while ((dip[0] + u) > 180 || (dip[0] + u) < 0);
 
                         l_dip = dip[0] + u;
@@ -230,13 +222,13 @@ void GeometryBuilder::push_geometry_DFN(General general, Geometry geometry) {
                         l_length = length[0];
                     } else if (length_method == random_method::RANDOM_GAUSSE) {
                         do {
-                            u = gsl_ran_gaussian(r, length[1]);
+                            u = r.gaussian(length[1]);
                         } while ((length[0] + u) < 0.05 * length[0]);
 
                         l_length = length[0] + u;
                     } else if (length_method == random_method::RANDOM_FISHER) {
                         do {
-                            u = gsl_ran_fdist(r, length[0], length[1]);
+                            u = r.fisherF(length[0], length[1]);
                         } while ((u) < 0.05 * length[0]);
                         l_length = u;
                     }
@@ -280,10 +272,10 @@ void GeometryBuilder::push_geometry_DFN(General general, Geometry geometry) {
                 do {
                     /* get the random x y*/
                     /* x xoord */
-                    u = gsl_rng_uniform(r);
+                    u = r.uniform();
                     x = geometry->x0 + (geometry->x1 - geometry->x0) * u;
                     /* y coord */
-                    u = gsl_rng_uniform(r);
+                    u = r.uniform();
                     y = geometry->y0 + (geometry->y1 - geometry->y0) * u;
 
                     /* get the dip */
@@ -293,11 +285,11 @@ void GeometryBuilder::push_geometry_DFN(General general, Geometry geometry) {
                     } else if (dip_method == random_method::RANDOM_CONSTANT) {
                         l_dip = dip[0];
                     } else if (dip_method == random_method::RANDOM_UNIFORM) {
-                        u     = gsl_rng_uniform(r);
+                        u     = r.uniform();
                         l_dip = dip[0] + (dip[1] - dip[0]) * u;
                     } else if (dip_method == random_method::RANDOM_GAUSSE) {
                         do {
-                            u = gsl_ran_gaussian(r, dip[1]);
+                            u = r.gaussian(dip[1]);
                         } while ((dip[0] + u) > 180 || (dip[0] + u) < 0);
 
                         l_dip = dip[0] + u;
@@ -311,13 +303,13 @@ void GeometryBuilder::push_geometry_DFN(General general, Geometry geometry) {
                         l_length = length[0];
                     } else if (length_method == random_method::RANDOM_GAUSSE) {
                         do {
-                            u = gsl_ran_gaussian(r, length[1]);
+                            u = r.gaussian(length[1]);
                         } while ((length[0] + u) < 0.05 * length[0]);
 
                         l_length = length[0] + u;
                     } else if (length_method == random_method::RANDOM_FISHER) {
                         do {
-                            u = gsl_ran_fdist(r, length[0], length[1]);
+                            u = r.fisherF(length[0], length[1]);
                         } while ((u) < 0.05 * length[0]); /* to short will induce mesh problem */
                         l_length = u;
                     }
@@ -369,7 +361,6 @@ void GeometryBuilder::push_geometry_DFN(General general, Geometry geometry) {
             default: break;
         }
     }
-    gsl_rng_free(r);
     // add to node groups
     addtoLinetoNodeGroups(geometry, newToolTag);
     // build for line groups

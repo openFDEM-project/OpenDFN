@@ -9,7 +9,7 @@
  * \email     xfli@whrsm.ac.cn
  * \date      Created:       June 24, 2020
  * \date      Last modified: 2026-07-20 00:04:41
- * \version   OpenDFN Version 4.40 (managed by CMake macro PRG_VERSION,
+ * \version   OpenDFN Version 1.0.0 (managed by CMake macro PRG_VERSION,
  *            generated into common/opendfn_config.h from opendfn_config.h.in)
  *
  * \see OpenDFN Project Website: https://xiaofengli-uoft.github.io/Mainpage/
@@ -19,8 +19,6 @@
  *
  * Copyright (C) 2017-2026 Xiaofeng Li. OpenDFN Contributors.
  *
- * OpenDFN is free for educational, research and non-profit purposes.
- * Any commerical or military use should be authorised by the developer.
  *
  * OpenDFN is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

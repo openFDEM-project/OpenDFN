@@ -38,24 +38,28 @@ add_executable(opendfn
     ${MESH_SRC}
     ${PARSER_SRC})
 
-# --- third-party libraries --------------------------------------------------
-set(OPENDFN_THIRD_PARTY_LIB_DIR "${OPENDFN_THIRD_PARTY_ROOT}/lib")
-set(OPENDFN_THIRD_PARTY_BIN_DIR "${OPENDFN_THIRD_PARTY_ROOT}/bin")
-target_link_libraries(opendfn
-    "${OPENDFN_THIRD_PARTY_LIB_DIR}/gmsh.lib"
-    "${OPENDFN_THIRD_PARTY_LIB_DIR}/triangle.lib"
-    "${OPENDFN_THIRD_PARTY_LIB_DIR}/gsl.lib"
-    "${OPENDFN_THIRD_PARTY_LIB_DIR}/gslcblas.lib")
+# --- Gmsh SDK --------------------------------------------------------------
+set(OPENDFN_GMSH_IMPORT_LIB "${OPENDFN_GMSH_SDK_LIB_DIR}/gmsh.dll.lib")
+set(OPENDFN_GMSH_RUNTIME_DLL "${OPENDFN_GMSH_SDK_LIB_DIR}/gmsh-5.0.dll")
+if(NOT EXISTS "${OPENDFN_GMSH_IMPORT_LIB}")
+    message(FATAL_ERROR
+        "OpenDFN requires the Gmsh SDK import library at "
+        "${OPENDFN_GMSH_IMPORT_LIB}")
+endif()
+if(NOT EXISTS "${OPENDFN_GMSH_RUNTIME_DLL}")
+    message(FATAL_ERROR
+        "OpenDFN requires the matching Gmsh SDK runtime at "
+        "${OPENDFN_GMSH_RUNTIME_DLL}")
+endif()
+
+target_link_libraries(opendfn PRIVATE
+    "${OPENDFN_GMSH_IMPORT_LIB}")
 
 if(WIN32)
-    foreach(runtime_file gmsh-4.10.dll gsl.dll gslcblas.dll)
-        if(EXISTS "${OPENDFN_THIRD_PARTY_BIN_DIR}/${runtime_file}")
-            add_custom_command(TARGET opendfn POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                    "${OPENDFN_THIRD_PARTY_BIN_DIR}/${runtime_file}"
-                    "$<TARGET_FILE_DIR:opendfn>/${runtime_file}")
-        endif()
-    endforeach()
+    add_custom_command(TARGET opendfn POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${OPENDFN_GMSH_RUNTIME_DLL}"
+            "$<TARGET_FILE_DIR:opendfn>/gmsh-5.0.dll")
 endif()
 
 if(MSVC)

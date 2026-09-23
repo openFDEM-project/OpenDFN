@@ -3,85 +3,163 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$projectRoot = Split-Path -Parent $PSScriptRoot
-$executable = Join-Path $projectRoot "src\bin\$Configuration\opendfn.exe"
-$reportPath = Join-Path $PSScriptRoot "test_report.md"
+$projectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+$examplesRoot = Join-Path $projectRoot "examples"
+$executable = Join-Path $projectRoot "bin\opendfn.exe"
 
 if (-not (Test-Path -LiteralPath $executable -PathType Leaf)) {
     throw "OpenDFN executable not found: $executable"
 }
 
-$cases = @(
-    @{ Name = "Single joint"; Deck = "examples\single_joint\single_joint.dfn"; Mesh = "examples\single_joint\single_joint.msh"; Groups = @("rock", "single_joint") },
-    @{ Name = "Multiple joints"; Deck = "examples\multiple_joints\multiple_joints.dfn"; Mesh = "examples\multiple_joints\multiple_joints.msh"; Groups = @("rock", "joint_01", "joint_02", "joint_03", "joint_04", "joint_05") },
-    @{ Name = "Continuous joint sets"; Deck = "examples\continuous_joint_sets\continuous_joint_sets.dfn"; Mesh = "examples\continuous_joint_sets\continuous_joint_sets.msh"; Groups = @("rock", "continuous_set_01", "continuous_set_02") },
-    @{ Name = "Discontinuous joint sets"; Deck = "examples\discontinuous_joint_sets\discontinuous_joint_sets.dfn"; Mesh = "examples\discontinuous_joint_sets\discontinuous_joint_sets.msh"; Groups = @("rock", "discontinuous_set_01", "discontinuous_set_02") },
-    @{ Name = "Arbitrary DFN"; Deck = "examples\arbitrary_dfn\arbitrary_dfn.dfn"; Mesh = "examples\arbitrary_dfn\arbitrary_dfn.msh"; Groups = @("rock", "arbitrary_network") },
-    @{ Name = "Input real DFN"; Deck = "examples\input_real_dfn\input_real_dfn.dfn"; Mesh = "examples\input_real_dfn\input_real_dfn.msh"; Groups = @("rock", "input_fractures") },
-    @{ Name = "Basic geometry"; Deck = "examples\basic_geometry\basic_geometry.dfn"; Mesh = "examples\basic_geometry\basic_geometry.msh"; Groups = @("rock", "main_joint", "cross_joint") },
-    @{ Name = "Random DFN"; Deck = "examples\random_dfn\random_dfn.dfn"; Mesh = "examples\random_dfn\random_dfn.msh"; Groups = @("rock", "set_1", "set_2") },
-    @{ Name = "Realistic rDFN"; Deck = "examples\realistic_dfn\realistic_dfn.dfn"; Mesh = "examples\realistic_dfn\realistic_dfn.msh"; Groups = @("rock", "mapped_fractures") }
-)
+$decks = @(Get-ChildItem -LiteralPath $examplesRoot -Recurse -File -Filter "*.dfn" | Sort-Object FullName)
+if ($decks.Count -eq 0) {
+    throw "No DFN decks were found under $examplesRoot"
+}
 
+$workspaceRoot = Join-Path ([System.IO.Path]::GetTempPath()) `
+    ("OpenDFN-regression-" + [guid]::NewGuid().ToString("N"))
 $env:OPENDFN_GMSH_GUI = "0"
+$env:OPENDFN_RANDOM_SEED = "0"
 $results = @()
 
-foreach ($case in $cases) {
-    $deck = Join-Path $projectRoot $case.Deck
-    $mesh = Join-Path $projectRoot $case.Mesh
-    $runLog = [System.IO.Path]::ChangeExtension($deck, ".run.log")
-    Remove-Item -LiteralPath $mesh, $runLog -Force -ErrorAction SilentlyContinue
+New-Item -ItemType Directory -Path $workspaceRoot | Out-Null
+try {
+    foreach ($deckSource in $decks) {
+        $caseId = $deckSource.Directory.Name
+        $workDirectory = Join-Path $workspaceRoot $caseId
+        New-Item -ItemType Directory -Path $workDirectory | Out-Null
 
-    $output = & $executable -in $deck 2>&1 | Out-String
-    $exitCode = $LASTEXITCODE
-    Set-Content -LiteralPath $runLog -Value $output -Encoding UTF8
+        $deck = Join-Path $workDirectory $deckSource.Name
+        Copy-Item -LiteralPath $deckSource.FullName -Destination $deck
+        $deckText = Get-Content -LiteralPath $deck -Raw
+        foreach ($line in ($deckText -split "`r?`n")) {
+            if ($line -notmatch '^\s*odfn\.geometry\.import\.rdfn\b') {
+                continue
+            }
+            $quotedValues = @([regex]::Matches($line, "'([^']+)'") | ForEach-Object {
+                $_.Groups[1].Value
+            })
+            if ($quotedValues.Count -lt 3) {
+                throw "Malformed import.rdfn command in $($deckSource.FullName): $line"
+            }
+            $dependencyName = $quotedValues[-1]
+            $dependencySource = Join-Path $deckSource.DirectoryName $dependencyName
+            if (-not (Test-Path -LiteralPath $dependencySource -PathType Leaf)) {
+                throw "Required coordinate input not found for $($deckSource.FullName): $dependencyName"
+            }
+            Copy-Item -LiteralPath $dependencySource -Destination $workDirectory
+        }
 
-    $meshExists = Test-Path -LiteralPath $mesh -PathType Leaf
-    $meshSize = if ($meshExists) { (Get-Item -LiteralPath $mesh).Length } else { 0 }
-    $meshText = if ($meshExists) { Get-Content -LiteralPath $mesh -Raw } else { "" }
-    $hasNodes = $meshText.Contains('$Nodes') -and $meshText.Contains('$EndNodes')
-    $hasElements = $meshText.Contains('$Elements') -and $meshText.Contains('$EndElements')
-    $physicalGroups = @([regex]::Matches($meshText, '(?m)^\d+\s+\d+\s+"([^"]+)"\s*$') | ForEach-Object { $_.Groups[1].Value })
-    $groupsValid = @($case.Groups | Where-Object { $_ -notin $physicalGroups }).Count -eq 0
-    $hasError = $output -match '(?im)^.*Error:'
-    $passed = $exitCode -eq 0 -and $meshSize -gt 100 -and $hasNodes -and $hasElements -and $groupsValid -and -not $hasError
+        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($deck)
+        $mesh = Join-Path $workDirectory "$baseName.msh"
+        $geo = Join-Path $workDirectory "$baseName.geo"
+        $xao = Join-Path $workDirectory "$baseName.geo_unrolled.xao"
+        $vtk = Join-Path $workDirectory "$baseName.vtk"
 
-    $results += [pscustomobject]@{
-        Case = $case.Name
-        Passed = $passed
-        ExitCode = $exitCode
-        MeshBytes = $meshSize
-        NodesSection = $hasNodes
-        ElementsSection = $hasElements
-        PhysicalGroups = $groupsValid
-        Log = $runLog
+        $expectedGroups = [System.Collections.Generic.List[string]]::new()
+        foreach ($line in ($deckText -split "`r?`n")) {
+            if ($line -notmatch '^\s*odfn\.geometry\.(square|cut\.(joint|jset|dfn)|import\.rdfn)\b') {
+                continue
+            }
+            $quotedValues = @([regex]::Matches($line, "'([^']+)'") | ForEach-Object {
+                $_.Groups[1].Value
+            })
+            if ($quotedValues.Count -gt 0 -and -not $expectedGroups.Contains($quotedValues[0])) {
+                $expectedGroups.Add($quotedValues[0])
+            }
+        }
+
+        $output = & $executable -in $deck 2>&1 | Out-String
+        $exitCode = $LASTEXITCODE
+
+        $meshExists = Test-Path -LiteralPath $mesh -PathType Leaf
+        $meshText = if ($meshExists) { Get-Content -LiteralPath $mesh -Raw } else { "" }
+        $meshValid = $meshText.Contains('$MeshFormat') -and
+                     $meshText.Contains('$Nodes') -and
+                     $meshText.Contains('$Elements')
+
+        $geoText = if (Test-Path -LiteralPath $geo -PathType Leaf) {
+            Get-Content -LiteralPath $geo -Raw
+        } else {
+            ""
+        }
+        $geoUsesXao = $geoText -match '(?m)^\s*Merge\s+'
+        $geoHasEntities = $geoText -match '(?m)^Point\(' -and
+                          $geoText -match '(?m)^Line\(' -and
+                          $geoText -match '(?m)^Plane Surface\('
+        $geoValid = ($geoUsesXao -and (Test-Path -LiteralPath $xao -PathType Leaf)) -or
+                    $geoHasEntities
+
+        $vtkText = if (Test-Path -LiteralPath $vtk -PathType Leaf) {
+            Get-Content -LiteralPath $vtk -Raw
+        } else {
+            ""
+        }
+        $vtkValid = $vtkText.StartsWith('# vtk DataFile Version') -and
+                    $vtkText.Contains('DATASET UNSTRUCTURED_GRID') -and
+                    $vtkText.Contains('POINTS ') -and
+                    $vtkText.Contains('CELLS ')
+
+        $physicalGroups = @(
+            [regex]::Matches($meshText, '(?m)^\d+\s+\d+\s+"([^"]+)"\s*$') |
+                ForEach-Object { $_.Groups[1].Value }
+        )
+        $missingGroups = @($expectedGroups | Where-Object { $_ -notin $physicalGroups })
+        $groupsValid = $missingGroups.Count -eq 0
+        $hasRuntimeError = $output -match '(?im)^.*Error:'
+
+        $nodeCount = 0
+        $triangleCount = 0
+        if ($meshValid) {
+            $meshLines = @($meshText -split "`r?`n")
+            $nodeMarker = [Array]::IndexOf($meshLines, '$Nodes')
+            if ($nodeMarker -ge 0) {
+                [void][int]::TryParse($meshLines[$nodeMarker + 1], [ref]$nodeCount)
+            }
+            $elementMarker = [Array]::IndexOf($meshLines, '$Elements')
+            if ($elementMarker -ge 0) {
+                $elementCount = 0
+                [void][int]::TryParse($meshLines[$elementMarker + 1], [ref]$elementCount)
+                for ($i = $elementMarker + 2; $i -lt $elementMarker + 2 + $elementCount; $i++) {
+                    $parts = $meshLines[$i].Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)
+                    if ($parts.Count -gt 1 -and $parts[1] -eq '2') {
+                        $triangleCount++
+                    }
+                }
+            }
+        }
+
+        $passed = $exitCode -eq 0 -and $meshValid -and $geoValid -and
+                  $vtkValid -and $groupsValid -and -not $hasRuntimeError
+
+        $results += [pscustomobject]@{
+            Case = $caseId
+            Passed = $passed
+            Exit = $exitCode
+            Nodes = $nodeCount
+            Triangles = $triangleCount
+            Groups = $groupsValid
+            GEO = $geoValid
+            VTK = $vtkValid
+        }
+
+        if (-not $passed) {
+            Write-Warning "Output for failed case $caseId`n$output"
+            if ($missingGroups.Count -gt 0) {
+                Write-Warning "Missing physical groups: $($missingGroups -join ', ')"
+            }
+        }
+    }
+} finally {
+    if (Test-Path -LiteralPath $workspaceRoot -PathType Container) {
+        [System.IO.Directory]::Delete($workspaceRoot, $true)
     }
 }
 
-$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss K"
-$lines = @(
-    "# OpenDFN Regression Test Report",
-    "",
-    "- Generated: $timestamp",
-    "- Executable: ``src\\bin\\$Configuration\\opendfn.exe``",
-    "- Gmsh GUI: disabled",
-    "",
-    "| Case | Result | Exit | Mesh bytes | Nodes | Elements | Physical groups |",
-    "|---|---:|---:|---:|---:|---:|---:|"
-)
-
-foreach ($result in $results) {
-    $status = if ($result.Passed) { "PASS" } else { "FAIL" }
-    $lines += "| $($result.Case) | $status | $($result.ExitCode) | $($result.MeshBytes) | $($result.NodesSection) | $($result.ElementsSection) | $($result.PhysicalGroups) |"
-}
-
-$lines += ""
-$lines += "Each case writes a ``.run.log`` file beside its input deck."
-Set-Content -LiteralPath $reportPath -Value $lines -Encoding UTF8
-
 $results | Format-Table -AutoSize
 if ($results.Passed -contains $false) {
-    throw "One or more OpenDFN regression cases failed. See $reportPath"
+    throw "One or more OpenDFN example cases failed regression testing."
 }
 
-Write-Host "All OpenDFN regression cases passed. Report: $reportPath"
+Write-Host "All $($results.Count) OpenDFN example cases passed. Configuration: $Configuration"
+Write-Host "OPENDFN_RANDOM_SEED=0 was used and source example inputs were not modified."

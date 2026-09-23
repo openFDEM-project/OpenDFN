@@ -1,9 +1,0 @@
-# Coordinate-driven realistic DFN. Every line in fractures.txt is one fracture
-# polyline; adjacent coordinate pairs become connected embedded segments.
-odfn.geometry.domain [-0.1 3.0 -0.1 3.6]
-odfn.geometry.minsize 0.01
-odfn.geometry.minangle 12
-odfn.geometry.square 'rock' [0 2.85 0 3.47]
-odfn.geometry.import.rdfn 1000.0 'input_fractures' 'rock' 'fractures.txt'
-odfn.geometry.mesh.size 'default' 0.08
-odfn.geometry.mesh auto

@@ -51,6 +51,19 @@ The case directories contain inputs only. Generated files are removed after
 validation. Input sizes and SHA-256 checksums for the 13 decks and four
 coordinate files are recorded in `examples/MANIFEST_SHA256.json`.
 
+### OpenFDEM angle-sensitivity cases
+
+The `examples/OpenFDEM_angle_validation_cases/` directory contains three
+downstream OpenFDEM calculation cases corresponding to the 10°, 15°, and 20°
+minimum intersection-angle settings discussed in the Cover Letter. Each case
+folder contains an OpenFDEM input file (`.of`), the matching mesh file (`.msh`),
+and the corresponding OpenDFN input deck (`.dfn`). The `.of` files import the
+same-name `.msh` files. These downstream calculations are supplementary to,
+and are not part of, the 13-case OpenDFN regression suite described above.
+
+To run the calculations, install OpenFDEM and follow the instructions in
+[`examples/OpenFDEM_angle_validation_cases/README.md`](examples/OpenFDEM_angle_validation_cases/README.md).
+
 ## Build from Source
 
 OpenDFN 1.0.0 supports Windows 10/11 with the MSVC C++20 toolchain. Linux and
